@@ -19,6 +19,12 @@
                 запрос.
             dict['settings']['data'] - данные для отправки. Будут
                 сериализовываться.
+                dict['settings']['data']['headers'] - не обязательный
+                    параметр для заголовка запроса при type = http. При
+                    указании auto, подберёт случайный headers.
+                dict['settings']['data']['method'] - не обязательный
+                    параметр для указания метода при http запросе. По умолчанию
+                    GET.
 По этим данным будет создаваться задача (Task) и через указанный промежуток
 времени будет отправляться запрос (на сокеты или HTTP). Мониторинг задач
 выполняется многопоточным менеджером.
@@ -33,12 +39,13 @@
 5) Класс менеджера задач (вызов задачи по расписанию, добавление/удаление/просмотр);
 6) Логирование;
 7) Просмотр активных задач;
-8) Поддержка headers в http запросах (в том числе случайных).
+8) Поддержка headers в http запросах (в том числе случайных);
+9) Отправка запросов по любому HTTP методу.
 
 В планах. TODO:
-1) Добавить отправку запросов по любому HTTP методу;
-2) Добавить возможность отправки UDP запроса;
-3) Отправка данных в каналы;
+1) Добавить возможность отправки UDP запроса;
+2) Отправка данных в каналы;
+3) Самобалансирующийся timeout;
 4) Интерфейс (Objective C/PyCocoa?);
 """
 import socket
@@ -48,7 +55,7 @@ import threading
 from broker.config import DEBUG, HOST, PORT
 from broker.managers.task import Task, TaskManager
 from broker.logger import logger
-from errors import ValidateError
+from broker.errors import ValidateError
 
 task_manager = TaskManager()
 task_manager.manage()
@@ -76,6 +83,12 @@ def add_task(data: dict) -> None:
                     запрос.
                 dict['settings']['data'] - данные для отправки. Будут
                     сериализовываться.
+                    dict['settings']['data']['headers'] - не обязательный
+                        параметр для заголовка запроса при type = http. При
+                        указании auto, подберёт случайный headers.
+                    dict['settings']['data']['method'] - не обязательный
+                        параметр для указания метода при http запросе. По
+                        умолчанию GET.
         )
     """
     task = Task(data)
