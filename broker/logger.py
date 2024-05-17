@@ -1,3 +1,6 @@
+"""
+Логгер ошибок. Основан на встроенной библиотеке logging.
+"""
 import logging
 from typing import Union, TypeVar, Any, Callable
 
